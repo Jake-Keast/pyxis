@@ -36,6 +36,11 @@ pub fn random(s: u64) vec3 {
     return vec3{ seed.random.float(f64), seed.random.float(f64), seed.random.float(f64) };
 }
 
+pub fn near_zero(v: vec3) bool {
+    const s: f64 = 1e-8;
+    return (abs(v[0]) < s) and (abs(v[1]) < s) and (abs(v[2]) < s);
+}
+
 pub fn degrees_to_radians(angle: f64) f64 {
     return angle * (pi / 180.0);
 }
