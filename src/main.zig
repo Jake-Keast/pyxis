@@ -20,6 +20,11 @@ const height: u64 = 255;
 const width: u64 = @floatToInt(u64, @intToFloat(f64, height) * aspect_ratio); // Calculate width from height and aspect ratio (height * aspect ratio)
 const samples: u64 = 100;
 const max_depth: i64 = 20;
+const lookfrom = point3{ 3.0, 3.0, 2.0 };
+const lookat = point3{ 0.0, 0.0, -1.0 };
+const vup = vec3{ 0.0, 1.0, 0.0 };
+const dist_to_focus: f64 = Vecmath.magnitude(lookfrom - lookat);
+const aperture: f64 = 2.0;
 
 // Memory Allocation
 var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
@@ -37,7 +42,7 @@ pub fn main() !void {
 
     // Camera Setup (with test data)
     var cam: Camera.camera = undefined;
-    cam.init(point3{ -2.0, 2.0, 1.0 }, point3{ 0.0, 0.0, 0.0 }, vec3{ 0.0, 1.0, 0.0 }, 90, aspect_ratio);
+    cam.init(lookfrom, lookat, vup, 20.0, aspect_ratio, aperture, dist_to_focus);
 
     // World Setup
     var world_len: u64 = 5;
@@ -92,7 +97,7 @@ pub fn main() !void {
             while (sample < samples) : (sample += 1) {
                 var U: f64 = (@intToFloat(f64, i) + seed.random.float(f64)) / @intToFloat(f64, width - 1);
                 var V: f64 = (@intToFloat(f64, j) + seed.random.float(f64)) / @intToFloat(f64, height - 1);
-                var r: Ray.ray = cam.get_ray(U, V);
+                var r: Ray.ray = cam.get_ray(U, V, &seed);
                 color_ac += Ray.ray_color(&r, world, &seed, max_depth);
             }
             color_ac = color_ac * @splat(3, @as(f64, (1.0 / @intToFloat(f64, samples))));

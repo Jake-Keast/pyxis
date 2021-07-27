@@ -57,6 +57,16 @@ pub fn random_in_hemisphere(normal: vec3, seed: *Prng) vec3 {
     }
 }
 
+// min + (max-min)*seed.random.float(f64)
+
+pub fn random_in_unit_disk(seed: *Prng) vec3 {
+    while (true) {
+        var p = vec3{ -1.0 + seed.random.float(f64) * 2.0, -1.0 + seed.random.float(f64) * 2.0, 0.0 };
+        if (magnitude_squared(p) >= 1) continue;
+        return p;
+    }
+}
+
 pub fn near_zero(v: vec3) bool {
     const s: f64 = 1e-8;
     return (abs(v[0]) < s) and (abs(v[1]) < s) and (abs(v[2]) < s);

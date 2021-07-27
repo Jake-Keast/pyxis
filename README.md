@@ -4,7 +4,7 @@ Pyxis is a CPU Render Engine that utilises Monte Carlo Ray Tracing, written in Z
 The program is invoked by "zig run src/main.zig | bzip2 > FILENAME.ppm.bz2". Its clunky, but the ppm file format was the easiest to work with.
 
 ## TODO
-- Defocus Blur
+- Defocus Blur ✅
 - Lights
 - Triangles
 - Surface Textures
